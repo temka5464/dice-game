@@ -14,7 +14,7 @@ document.getElementById("current-1").textContent = "0";
 var diceDOM = document.querySelector(".dice");
 diceDOM.style.display = "none";
 
-//Шоог шидэх эвент listener
+//Шоог шидэх event listener
 document.querySelector(".btn-roll").addEventListener("click", function () {
   diceNumber = Math.floor(Math.random() * 6) + 1;
   //   alert("shoog shidlee : " + diceNumber);
@@ -24,11 +24,34 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
     roundScore = roundScore + diceNumber;
     document.getElementById("current-" + activePlayer).textContent = roundScore;
   } else {
-    roundScore = 0;
-    document.getElementById("current-" + activePlayer).textContent = 0;
-    activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
-    document.querySelector(".player-0-panel").classList.toggle("active");
-    document.querySelector(".player-1-panel").classList.toggle("active");
-    diceDOM.style.display = "none";
+    switchToNextPlayer();
   }
 });
+
+//Оноогоо цуглуулах event listener
+document.querySelector(".btn-hold").addEventListener("click", function () {
+  scores[activePlayer] = scores[activePlayer] + roundScore;
+  document.getElementById("score-" + activePlayer).textContent =
+    scores[activePlayer];
+  if (scores[activePlayer] >= 20) {
+    document.getElementById("name-" + activePlayer).textContent = "WINNER!";
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.add("winner");
+    document.querySelector(".player-1-panel").classList.remove("active");
+  } else {
+    switchToNextPlayer();
+  }
+  document.getElementById("score-" + activePlayer).textContent =
+    scores[activePlayer];
+});
+
+//Ээлж солих функц
+function switchToNextPlayer() {
+  roundScore = 0;
+  document.getElementById("current-" + activePlayer).textContent = 0;
+  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+  document.querySelector(".player-0-panel").classList.toggle("active");
+  document.querySelector(".player-1-panel").classList.toggle("active");
+  diceDOM.style.display = "none";
+}
